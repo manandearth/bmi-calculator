@@ -40,17 +40,8 @@
   [values-map ::values-map]
   (let [result (bmi values-map)]
     (println  "Your Body/Mass index is: " result)
-    (Thread/sleep 2000 )
     (println  (rand-nth thoughtful-remarks) (statement result))
     result))
-
-(defmacro vari-result
-  "macro version of `print-result` takes a function and width/height values and return bmi statement. f is `println` on run and `str` in the test"
-  [f values-map]
-  `(let [result# (~bmi ~values-map)]
-     (do (~f "Your Body/Mass index is: " result#)
-         (~f (rand-nth thoughtful-remarks) (statement result#)))))
-
 
 (defn get-input 
   "get user input"
@@ -58,20 +49,20 @@
   (let [input (clojure.string/trim (read-line))]
      input))
 
-(defn prompt-height [f weight]
+(defn prompt-height [weight]
   (println "What is your height? [in cm]")
-  (let [height (/ (Double/parseDouble (f)) 100)]
-    (vari-result println {:weight weight :height height})))
+  (let [height (/ (Double/parseDouble (get-input)) 100)]
+    (print-result {:weight weight :height height})))
 
 (defn prompt-weight
-  [f]
+  []
   (println "What is your weight? [in kg]")
-  (let [weight (Double/parseDouble (f))]
-    (prompt-height f weight)))
+  (let [weight (Double/parseDouble (get-input))]
+    (prompt-height weight)))
 
 
 (defn -main [& args]
   (println "BMI calculator")
   (println "==============")
   (println "")
-  (prompt-weight get-input))
+  (prompt-weight))
