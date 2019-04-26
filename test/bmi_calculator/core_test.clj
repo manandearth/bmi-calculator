@@ -10,20 +10,6 @@
       1.0 {:x 100.0 :y 10.0}
       )))
 
-(defn get-input-helper
-  "replacing the user stdin string"
-  []
-  (str 180.0))
-
-;;(prompt-height get-input-helper 77.0)
-;;(Double/parseDouble (get-input-helper))
-
-;;TODO make this useful
-(deftest input-test
-  (print-result 73.0 170.0)
-  (is (= nil (prompt-height get-input-helper 77.0) )))
-
-
 (deftest results-test
   (testing "Testing expected strings"
     (are [expected weight height]
@@ -36,4 +22,3 @@
       "obese"             89.0   1.65
       "extremely"         120.0  1.65
       "not likely"        0.0    1.73)))
-

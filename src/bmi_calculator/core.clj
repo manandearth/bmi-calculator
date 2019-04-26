@@ -5,11 +5,11 @@
             [orchestra.spec.test :as st])
   (:gen-class))
 
-(spec/def ::weight (spec/and double? (complement empty?)))
+(spec/def ::weight double?)
 (spec/def ::height double?)
 (spec/def ::bmi    (spec/and pos? double?))
 (spec/def ::present-string (spec/and string? (complement empty?)))
-(spec/def ::values-map map?)
+(spec/def ::values-map (spec/keys :req-un [::weight ::height]))
 
 (defn-spec bmi ::bmi
   [{:keys [weight height] :as values-map} ::values-map]
