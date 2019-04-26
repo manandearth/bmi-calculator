@@ -26,13 +26,14 @@
 
 (deftest results-test
   (testing "Testing expected strings"
-    (are [expected arg-map]
-        (.contains (vari-result str (:weight arg-map) (:height arg-map)) expected)
-      "underweight"      {:weight 45.0 :height 1.63}
-      "normal"           {:weight 73.0 :height 1.75}
-      "not possible"     {:weight 273.0 :height 1.73}
-      "overweight"       {:weight 73.0 :height 1.68}
-      "dangerously"      {:weight 35.0 :height 1.65}
-      "obese"            {:weight 89.0 :height 1.65}
-      "extremely"        {:weight 120.0 :height 1.65}
-      "not likely"       {:weight 0.0 :height 1.73})))
+    (are [expected weight height]
+        (.contains (with-out-str (print-result {:weight weight :height height})) expected)
+      "underweight"       45.0   1.63
+      "normal"            73.0   1.75
+      "not possible"      273.0  1.73
+      "overweight"        73.0   1.68
+      "dangerously"       35.0   1.65
+      "obese"             89.0   1.65
+      "extremely"         120.0  1.65
+      "not likely"        0.0    1.73)))
+
