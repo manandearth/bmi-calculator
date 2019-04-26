@@ -15,9 +15,10 @@
   []
   (str 180.0))
 
-(prompt-height get-input-helper 77.0)
-(Double/parseDouble (get-input-helper))
+;;(prompt-height get-input-helper 77.0)
+;;(Double/parseDouble (get-input-helper))
 
+;;TODO make this useful
 (deftest input-test
   (print-result 73.0 170.0)
   (is (= nil (prompt-height get-input-helper 77.0) )))
