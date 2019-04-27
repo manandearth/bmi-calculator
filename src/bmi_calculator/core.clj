@@ -1,8 +1,9 @@
 (ns bmi-calculator.core
   "Calculates Body Mass Index given weight and height"
   (:require [clojure.spec.alpha :as spec]
-   [orchestra.core :refer [defn-spec]]
-            [orchestra.spec.test :as st])
+            [orchestra.core :refer [defn-spec]]
+            [orchestra.spec.test :as st]
+            [expound.alpha :as expound])
   (:gen-class))
 
 (spec/def ::weight double?)
@@ -70,3 +71,4 @@
   (prompt-weight))
 
 (st/instrument)
+(set! spec/*explain-out* expound/printer)
