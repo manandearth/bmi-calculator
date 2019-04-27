@@ -8,7 +8,8 @@
 (spec/def ::weight double?)
 (spec/def ::height double?)
 (spec/def ::bmi    (spec/and pos? double?))
-(spec/def ::present-string (spec/and string? (complement empty?)))
+(spec/def ::present-string  (spec/and string? (complement empty?)))
+(spec/def ::side-effect nil?)
 (spec/def ::person (spec/keys :req-un [::weight ::height]))
 
 (defn-spec bmi ::bmi
@@ -18,7 +19,7 @@
 (defn-spec statement ::present-string
   [num ::bmi]
   (cond
-    (<= num 0)  "not likely"
+    (<= num 10)  "not likely"
     (<= num 16) "dangerously underweight"
     (<= num 20) "underweight"
     (<= num 25) "normal"
@@ -36,13 +37,13 @@
    "As far as I know it is"
    "If I am not mistaken it is"])
 
-(defn-spec print-result ::present-string
+(defn-spec print-result ::side-effect
   "takes weight and height values and prints back result"
   [person ::person]
   (let [result (bmi person)]
     (println  "Your Body/Mass index is: " result)
     (println  (rand-nth thoughtful-remarks) (statement result))
-    result))
+    ))
 
 (defn get-input 
   "get user input"
@@ -67,3 +68,5 @@
   (println "==============")
   (println "")
   (prompt-weight))
+
+(st/instrument)
