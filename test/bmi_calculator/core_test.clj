@@ -4,10 +4,10 @@
 
 (deftest bmi-test
   (testing "Testing range and spec"
-    (are [expected arg-map]
-        (= expected (bmi (:x arg-map) (:y arg-map)))
-      0.01 {:x 100.0 :y 100.0}
-      1.0 {:x 100.0 :y 10.0}
+    (are [expected weight height]
+        (= expected (bmi {:weight weight :height height}))
+      0.01  100.0 100.0
+      1.0   100.0  10.0
       )))
 
 (deftest results-test

@@ -9,22 +9,23 @@
 (spec/def ::height double?)
 (spec/def ::bmi    (spec/and pos? double?))
 (spec/def ::present-string (spec/and string? (complement empty?)))
-(spec/def ::values-map (spec/keys :req-un [::weight ::height]))
+(spec/def ::person (spec/keys :req-un [::weight ::height]))
 
 (defn-spec bmi ::bmi
-  [{:keys [weight height] :as values-map} ::values-map]
+  [{:keys [weight height] :as person} ::person]
   (/ weight (Math/pow height 2)))
 
 (defn-spec statement ::present-string
-  [num ::bmi] (cond
-                (<= num 0)  "not likely"
-                (<= num 16) "dangerously underweight"
-                (<= num 20) "underweight"
-                (<= num 25) "normal"
-                (<= num 30) "overweight.."
-                (<= num 40) "obese"
-                (<= num 60) "extremely obese"
-                :else      "not possible"))
+  [num ::bmi]
+  (cond
+    (<= num 0)  "not likely"
+    (<= num 16) "dangerously underweight"
+    (<= num 20) "underweight"
+    (<= num 25) "normal"
+    (<= num 30) "overweight.."
+    (<= num 40) "obese"
+    (<= num 60) "extremely obese"
+    :else      "not possible"))
 
 (def thoughtful-remarks
   ["Which falls in the category"
@@ -37,8 +38,8 @@
 
 (defn-spec print-result ::present-string
   "takes weight and height values and prints back result"
-  [values-map ::values-map]
-  (let [result (bmi values-map)]
+  [person ::person]
+  (let [result (bmi person)]
     (println  "Your Body/Mass index is: " result)
     (println  (rand-nth thoughtful-remarks) (statement result))
     result))
