@@ -21,6 +21,5 @@
       "dangerously"       35.0   1.65
       "obese"             89.0   1.65
       "extremely"         120.0  1.65
-      "not likely"        0.1    1.73)))
-
-(with-out-str (print-result {:weight 45.0 :height 1.63}))
+      "not likely"        0.1    1.73
+      )))
