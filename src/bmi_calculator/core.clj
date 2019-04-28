@@ -54,21 +54,32 @@
 
 (defn prompt-height [weight]
   (println "What is your height? [in cm]")
-  (let [height (/ (Double/parseDouble (get-input)) 100)]
-    (print-result {:weight weight :height height})))
+  (let [height-cm (get-input)]
+    (try
+      (print-result {:weight weight
+                     :height (/ (Double/parseDouble height-cm) 100)})
+      (catch Exception e (println "Not a number..")
+             (prompt-height weight)))))
+
+(declare start-app)
 
 (defn prompt-weight
   []
   (println "What is your weight? [in kg]")
-  (let [weight (Double/parseDouble (get-input))]
-    (prompt-height weight)))
+  (let [weight (get-input)]
+    (try
+      (prompt-height (Double/parseDouble weight))
+      (catch Exception e (println "Not a number")
+             (start-app)))))
 
-
-(defn -main [& args]
+(defn start-app []
   (println "BMI calculator")
   (println "==============")
   (println "")
   (prompt-weight))
+
+(defn -main [& args]
+  (start-app))
 
 (st/instrument)
 
