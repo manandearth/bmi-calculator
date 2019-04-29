@@ -23,3 +23,17 @@
       "extremely"         120.0  1.65
       "not likely"        0.1    1.73
       )))
+
+(deftest prompt-height-test
+  (testing "Testing prompt-height prompt"
+    (are [expected weight height]
+        (let [result (with-out-str
+                     (with-in-str height
+                       (prompt-height weight)))]
+          (.contains result  expected)
+          "normal"        73.0 "175"
+          "underweight"   43.0 "180"
+          "obese"        120.0 "160"
+          "Not a number" 165.0 "s"))))
+
+
