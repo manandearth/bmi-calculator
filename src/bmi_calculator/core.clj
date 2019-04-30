@@ -6,9 +6,10 @@
             [expound.alpha :as expound])
   (:gen-class))
 
-(spec/def ::weight double?)
-(spec/def ::height double?)
-(spec/def ::bmi    (spec/and pos? double?))
+(spec/def ::present-double (spec/and double? pos?))
+(spec/def ::weight ::present-double)
+(spec/def ::height ::present-double)
+(spec/def ::bmi    ::present-double)
 (spec/def ::present-string  (spec/and string? (complement empty?)))
 (spec/def ::side-effect nil?)
 (spec/def ::person (spec/keys :req-un [::weight ::height]))
@@ -43,14 +44,13 @@
   [person ::person]
   (let [result (bmi person)]
     (println  "Your Body/Mass index is: " result)
-    (println  (rand-nth thoughtful-remarks) (statement result))
-    ))
+    (println  (rand-nth thoughtful-remarks) (statement result))))
 
-(defn get-input 
+(defn get-input
   "get user input"
   []
   (let [input (clojure.string/trim (read-line))]
-     input))
+    input))
 
 (defn prompt-height [weight]
   (println "What is your height? [in cm]")
