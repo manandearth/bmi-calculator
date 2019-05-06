@@ -1,14 +1,17 @@
 (ns bmi-calculator.core
   "Calculates Body Mass Index given weight and height"
   (:require [clojure.spec.alpha :as spec]
-   [orchestra.core :refer [defn-spec]]
-            [orchestra.spec.test :as st])
+            [orchestra.core :refer [defn-spec]]
+            [orchestra.spec.test :as st]
+            [expound.alpha :as expound])
   (:gen-class))
 
-(spec/def ::weight double?)
-(spec/def ::height double?)
-(spec/def ::bmi    (spec/and pos? double?))
-(spec/def ::present-string (spec/and string? (complement empty?)))
+(spec/def ::present-double (spec/and double? pos?))
+(spec/def ::weight ::present-double)
+(spec/def ::height ::present-double)
+(spec/def ::bmi    ::present-double)
+(spec/def ::present-string  (spec/and string? (complement empty?)))
+(spec/def ::side-effect nil?)
 (spec/def ::person (spec/keys :req-un [::weight ::height]))
 
 (defn-spec bmi ::bmi
@@ -18,7 +21,7 @@
 (defn-spec statement ::present-string
   [num ::bmi]
   (cond
-    (<= num 0)  "not likely"
+    (<= num 10)  "not likely"
     (<= num 16) "dangerously underweight"
     (<= num 20) "underweight"
     (<= num 25) "normal"
@@ -36,34 +39,49 @@
    "As far as I know it is"
    "If I am not mistaken it is"])
 
-(defn-spec print-result ::present-string
+(defn-spec print-result ::side-effect
   "takes weight and height values and prints back result"
   [person ::person]
   (let [result (bmi person)]
     (println  "Your Body/Mass index is: " result)
-    (println  (rand-nth thoughtful-remarks) (statement result))
-    result))
+    (println  (rand-nth thoughtful-remarks) (statement result))))
 
-(defn get-input 
+(defn get-input
   "get user input"
   []
   (let [input (clojure.string/trim (read-line))]
-     input))
+    input))
 
 (defn prompt-height [weight]
   (println "What is your height? [in cm]")
-  (let [height (/ (Double/parseDouble (get-input)) 100)]
-    (print-result {:weight weight :height height})))
+  (let [height-cm (get-input)]
+    (try
+      (print-result {:weight weight
+                     :height (/ (Double/parseDouble height-cm) 100)})
+      (catch Exception e (println "Not a number..")
+             (prompt-height weight)))))
+
+(declare start-app)
 
 (defn prompt-weight
   []
   (println "What is your weight? [in kg]")
-  (let [weight (Double/parseDouble (get-input))]
-    (prompt-height weight)))
+  (let [weight (get-input)]
+    (try
+      (prompt-height (Double/parseDouble weight))
+      (catch Exception e (println "Not a number")
+             (start-app)))))
 
-
-(defn -main [& args]
+(defn start-app []
   (println "BMI calculator")
   (println "==============")
   (println "")
   (prompt-weight))
+
+(defn -main [& args]
+  (start-app))
+
+(st/instrument)
+
+(set! spec/*explain-out* expound/printer)
+
